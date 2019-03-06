@@ -13,9 +13,9 @@ First, you run the script...
 
 You will get 2 options, "make" and "unpack"
 
-Make | Takes raw data and inputs it into a predetermined BMP "container" or "containers". Should the data exceed 48 MB, it will just be put into more files.
+Make | Takes raw data and inputs it into a predetermined BMP "container" or "containers". Should the data exceed 48 MB, it will just be put into more files. Make uses Input_Data and outputs results to Output_Images.
 
-Unpack | Takes the image data, strips the generic BMP header and buffer, and reassembles the original file, in a later version checksums will be used to make sure files are like the originals. You also have to input the number of files, but this may be automated in the future.
+Unpack | Takes the image data, strips the generic BMP header and buffer, and reassembles the original file, in a later version checksums will be used to make sure files are like the originals. You also have to input the number of files, but this may be automated in the future. Unpack uses Input_Images and outputs results to Output_Data.
 
 ## Purpose
 
