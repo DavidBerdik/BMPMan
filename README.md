@@ -1,4 +1,4 @@
-### BMPMan
+# BMPMan
 
 A utility made to wrap data in a bitmap file. BMPMan files will function as images wherever placed and are limited only to the media with which they are distributed. The core design of this application is centered around Google Photos and to be compliant with its core limitations. This application can not currently interact with any online media, it is strictly an offline app until modified thusly.
 
@@ -29,8 +29,12 @@ The **Cancel** button functions like a normal cancel button, and should halt the
 
 Each progress bar loads based on image interaction rather than number of files being worked with. The progress bar can alse be canceled, stopping the entire program and **Deleting All Files In The Output Directory**. Make sure the folders you are using are empty as data loss may occur.
 
-##License
+## License
 
 This software is licensed under the LGPLv-3, and will be compliant to the GPL licenses included in the imported packages. Packages imported and used by this project that are not in the standard library are:
 
 [PySimpleGUI27](https://github.com/PySimpleGUI/PySimpleGUI) | [License](https://github.com/PySimpleGUI/PySimpleGUI/blob/master/license.txt)
+
+Users with permission to act out of bounds of license are:
+
+*DavidBerdik*
