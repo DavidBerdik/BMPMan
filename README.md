@@ -1,30 +1,36 @@
-# BMPMan
-Pronounced "Bump-Man"
+### BMPMan
 
-Simply, this is a utility to make an image safe BMPthat contains up to 48 MB of data per image.
+A utility made to wrap data in a bitmap file. BMPMan files will function as images wherever placed and are limited only to the media with which they are distributed. The core design of this application is centered around Google Photos and to be compliant with its core limitations. This application can not currently interact with any online media, it is strictly an offline app until modified thusly.
 
-## Usage
+## How To Use
 
-The main usage of this program is through the use of 2 commands with their own internal arguments (this will be changed to sys.argv() soon)
+First, you have to execute as your OS supports, you will be greeted with a GUI window that displays the version and options.
 
-First, you run the script...
+![alt text](https://raw.githubusercontent.com/78Alpha/BMPMan/master/Images/Face.png)
 
-./Main.py
+BMPMan creates images and unpacks them from directories, you can use whatever directories you like, but if you don't mind too much, it generates default folders:
 
-You will get 2 options, "make" and "unpack"
+``Input_Data
+ Input_Images
+ Output_Data
+ Output_Images``
+ 
+The **Make** command takes data from *Input_Data* or your own input folder and output it to *Output_Images* or your own output folder. Each image will be of a size maxed out at ~50 MB.
+ 
+![alt text](https://raw.githubusercontent.com/78Alpha/BMPMan/master/Images/Progress_Bar.png)
+![alt text](https://raw.githubusercontent.com/78Alpha/BMPMan/master/Images/Make_Complete.png)
+ 
+The **Unpack** command takes data from *Input_Images* or your own input folder and output it to *Output_Data* or your own output folder.
+ 
+![alt text](https://raw.githubusercontent.com/78Alpha/BMPMan/master/Images/Progress_Bar.png)
+![alt text](https://raw.githubusercontent.com/78Alpha/BMPMan/master/Images/Unpack_Complete.png)
 
-Make | Takes raw data and inputs it into a predetermined BMP "container" or "containers". Should the data exceed 48 MB, it will just be put into more files. Make uses Input_Data and outputs results to Output_Images.
+The **Cancel** button functions like a normal cancel button, and should halt the application.
 
-Unpack | Takes the image data, strips the generic BMP header and buffer, and reassembles the original file, in a later version checksums will be used to make sure files are like the originals. You also have to input the number of files, but this may be automated in the future. Unpack uses Input_Images and outputs results to Output_Data.
+Each progress bar loads based on image interaction rather than number of files being worked with. The progress bar can alse be canceled, stopping the entire program and **Deleting All Files In The Output Directory**. Make sure the folders you are using are empty as data loss may occur.
 
-## Purpose
+##License
 
-Building on the idea of UDS from stewartmcgown, this method creates BMP files that are Google Photos safe (currently, later versions may have 'default' options to work on seperate platforms). These Google Photo safe images can be backed up using the free storage option, allowing you to have "Unlimited Google Drive Storage" via images. By creating albums, you can have a full directory containing all the images, allowing for easy sharing, downloading and unpacking with friends.
+This software is licensed under the LGPLv-3, and will be compliant to the GPL licenses included in the imported packages. Packages imported and used by this project that are not in the standard library are:
 
-## Future
-
-If I get around to it adn learn enough about the Google API, It may be possible to upload photos directly with the script, create albums, and make the process more seamless. Also, adding sys.argv() functions, maybe some multithreading, general improvements and such.
-
-### To Google
-
-I am sorry for what you have just looked at, and the disgust you are probably feeling, but hey, at least it was fun.
+[PySimpleGUI27](https://github.com/PySimpleGUI/PySimpleGUI) | [License](https://github.com/PySimpleGUI/PySimpleGUI/blob/master/license.txt)
