@@ -9,7 +9,7 @@ import threading
 import datetime
 from multiprocessing.pool import ThreadPool
 import PySimpleGUI_Custom as sg
-from PySimpleGUI_Custom import EasyPrint as Print
+from PySimpleGUI_Custom import Print
 import time
 import multiprocessing
 import sys
