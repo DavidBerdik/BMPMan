@@ -22,6 +22,7 @@ import random
 import io
 from PIL import Image
 import base64
+import multiprocessing
 
 
 def image_file_to_bytes(image64, size):
@@ -259,10 +260,6 @@ def rip_upd3(name, input_, output_, home_):
     files_ = os.listdir(input_)
     Print("DEBUG: Files In Input | {}".format(files_))
     check = 0
-    if len(output_) > 0:
-        delete(output_)
-    else:
-        pass
     for i in range(0, len(files_)):
         Print("DEBUG: Hashing Start!")
         event = sg.OneLineProgressMeter("Hashing Images", i, len(files_), 'key')
@@ -349,12 +346,33 @@ def rip_upd3(name, input_, output_, home_):
 
 
 def gen():
-    Print("DEBUG: Generating Test File...")
     values = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ12345667890!@#$%^&*()_+-="
-    for i in range(0, 1000):
+    for i in range(0, 100):
         sen = [random.choice(values) for i in range(1000000)]
         open("dummy", 'a').write(''.join(sen))
-    Print("DEBUG: Test File Generated | dummy")
+
+
+def lazy_proc():
+    _1 = multiprocessing.Process(target=gen)
+    _2 = multiprocessing.Process(target=gen)
+    _3 = multiprocessing.Process(target=gen)
+    _4 = multiprocessing.Process(target=gen)
+    _5 = multiprocessing.Process(target=gen)
+    _6 = multiprocessing.Process(target=gen)
+    _7 = multiprocessing.Process(target=gen)
+    _8 = multiprocessing.Process(target=gen)
+    _9 = multiprocessing.Process(target=gen)
+    _0 = multiprocessing.Process(target=gen)
+    _1.start()
+    _2.start()
+    _3.start()
+    _4.start()
+    _5.start()
+    _6.start()
+    _7.start()
+    _8.start()
+    _9.start()
+    _0.start()
 
 
 def initiate():
@@ -456,7 +474,7 @@ def core():
     else:
         Print("DEBUG: Data Directory Core | NoneType")
 
-    version = "1.5.8"
+    version = "1.5.9"
 
     out_images = 'Output_Images/'
     out_data = 'Output_Data/'
@@ -560,6 +578,5 @@ def core():
     except:
         pass
 
-#
 initiate()
 core()
