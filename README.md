@@ -8,7 +8,7 @@ Updated to use Python3! So long 2.7!
 
 First, you have to execute as your OS supports, you will be greeted with a GUI window that displays the version and options.
 
-![alt text](https://raw.githubusercontent.com/78Alpha/BMPMan/master/Images/Face.png)
+![alt text](https://raw.githubusercontent.com/78Alpha/BMPMan/master/Images/MainMenu.png)
 
 BMPMan creates images and unpacks them from directories, you can use whatever directories you like, but if you don't mind too much, it generates default folders:
 
@@ -19,13 +19,15 @@ BMPMan creates images and unpacks them from directories, you can use whatever di
  
 The **Make** command takes data from *Input_Data* or your own input folder and output it to *Output_Images* or your own output folder. Each image will be of a size maxed out at ~50 MB.
  
-![alt text](https://raw.githubusercontent.com/78Alpha/BMPMan/master/Images/Progress_Bar.png)
-![alt text](https://raw.githubusercontent.com/78Alpha/BMPMan/master/Images/Make_Complete.png)
+![alt text](https://raw.githubusercontent.com/78Alpha/BMPMan/master/Images/makehash.png)
+![alt text](https://raw.githubusercontent.com/78Alpha/BMPMan/master/Images/makebuild.png)
+![alt text](https://raw.githubusercontent.com/78Alpha/BMPMan/master/Images/MakeHashImages.png)
  
 The **Unpack** command takes data from *Input_Images* or your own input folder and output it to *Output_Data* or your own output folder.
  
-![alt text](https://raw.githubusercontent.com/78Alpha/BMPMan/master/Images/Progress_Bar.png)
-![alt text](https://raw.githubusercontent.com/78Alpha/BMPMan/master/Images/Unpack_Complete.png)
+![alt text](https://raw.githubusercontent.com/78Alpha/BMPMan/master/Images/unpackimageshash.png)
+![alt text](https://raw.githubusercontent.com/78Alpha/BMPMan/master/Images/unpackmakeog.png)
+![alt text](https://raw.githubusercontent.com/78Alpha/BMPMan/master/Images/hashoutunpack.png)
 
 The **Cancel** button functions like a normal cancel button, and should halt the application.
 
