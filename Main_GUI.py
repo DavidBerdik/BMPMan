@@ -8,8 +8,12 @@ import codecs
 import threading
 import datetime
 from multiprocessing.pool import ThreadPool
-import PySimpleGUI_Custom as sg
-from PySimpleGUI_Custom import Print
+try:
+    import PySimpleGUI_Custom as sg
+    from PySimpleGUI_Custom import Print
+except:
+    import PySimpleGUI as sg
+    from PySimpleGUI import Print
 import time
 import multiprocessing
 import sys
@@ -452,7 +456,7 @@ def core():
     else:
         Print("DEBUG: Data Directory Core | NoneType")
 
-    version = "1.5.7"
+    version = "1.5.8"
 
     out_images = 'Output_Images/'
     out_data = 'Output_Data/'
@@ -471,13 +475,41 @@ def core():
     yellow_box = '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'
     browse = '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'
 
-    layout = [[sg.Text('BMPMAN DEBUG {}'.format(version), font=font, text_color='yellow', background_color='black', justification='center', size=(25, 2))],
-              [sg.Text('INPUT', font=font, justification='right', background_color='black', text_color='yellow'), sg.InputText('USE_DEFAULT', font=font, text_color='#909090'),
-               sg.FolderBrowse(image_data=image_file_to_bytes((browse), (200, 30)), button_text="", border_width=0, button_color=('yellow', 'black'), font=font)],
-              [sg.Text('OUTPUT', font=font, justification='right', background_color='black', text_color='yellow'), sg.InputText('USE_DEFAULT', font=font,text_color='#909090'),
-               sg.FolderBrowse(image_data=image_file_to_bytes((browse), (200, 30)), button_text="", border_width=0, button_color=('yellow', 'black'), font=font)],
-              [sg.Button('make', font=font,border_width=0, image_data=image_file_to_bytes((red_box), (160,70)), button_color=('red', 'black')), sg.Button('unpack', font=font,border_width=0,  image_data=image_file_to_bytes((orange_box), (160,70)), button_color=('orange', 'black')),
-               sg.Button('exit', font=font, border_width=0, image_data=image_file_to_bytes((yellow_box), (160,70)), button_color=('yellow', 'black'))]]
+    try:
+        layout = [[sg.Text('BMPMAN DEBUG {}'.format(version), font=font, text_color='yellow', background_color='black',
+                           justification='center', size=(25, 2))],
+                  [sg.Text('INPUT', font=font, justification='right', background_color='black', text_color='yellow'),
+                   sg.InputText('USE_DEFAULT', font=font, text_color='#909090'),
+                   sg.FolderBrowse(image_data=image_file_to_bytes((browse), (200, 30)), button_text="", border_width=0,
+                                   button_color=('yellow', 'black'), font=font)],
+                  [sg.Text('OUTPUT', font=font, justification='right', background_color='black', text_color='yellow'),
+                   sg.InputText('USE_DEFAULT', font=font, text_color='#909090'),
+                   sg.FolderBrowse(image_data=image_file_to_bytes((browse), (200, 30)), button_text="", border_width=0,
+                                   button_color=('yellow', 'black'), font=font)],
+                  [sg.Button('make', font=font, border_width=0, image_data=image_file_to_bytes((red_box), (160, 70)),
+                             button_color=('red', 'black')), sg.Button('unpack', font=font, border_width=0,
+                                                                       image_data=image_file_to_bytes((orange_box),
+                                                                                                      (160, 70)),
+                                                                       button_color=('orange', 'black')),
+                   sg.Button('exit', font=font, border_width=0, image_data=image_file_to_bytes((yellow_box), (160, 70)),
+                             button_color=('yellow', 'black'))]]
+
+    except:
+        layout = [[sg.Text('BMPMAN DEBUG {}'.format(version), font=font, text_color='yellow', background_color='black',
+                           justification='center', size=(25, 2))],
+                  [sg.Text('INPUT', font=font, justification='right', background_color='black', text_color='yellow'),
+                   sg.InputText('USE_DEFAULT', font=font, text_color='#909090'),
+                   sg.FolderBrowse(button_text="BROWSE", button_color=('yellow', 'black'), font=font)],
+                  [sg.Text('OUTPUT', font=font, justification='right', background_color='black', text_color='yellow'),
+                   sg.InputText('USE_DEFAULT', font=font, text_color='#909090'),
+                   sg.FolderBrowse(button_text="BROWSE", button_color=('yellow', 'black'), font=font)],
+                  [sg.Button('make', font=font, border_width=0, image_data=image_file_to_bytes((red_box), (160, 70)),
+                             button_color=('red', 'black')),
+                   sg.Button('unpack', font=font, border_width=0,
+                             image_data=image_file_to_bytes((orange_box), (160, 70)),
+                             button_color=('orange', 'black')),
+                   sg.Button('exit', font=font, border_width=0, image_data=image_file_to_bytes((yellow_box), (160, 70)),
+                             button_color=('yellow', 'black'))]]
 
     window = sg.Window(title='BMPMan V.{}'.format(version), keep_on_top=False, no_titlebar=False, background_color='Black', grab_anywhere=True, alpha_channel=0.8).Layout(layout)  # Add this after | , alpha_channel=0.8
 
