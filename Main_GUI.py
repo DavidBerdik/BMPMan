@@ -8,6 +8,7 @@ import codecs
 import threading
 import datetime
 from multiprocessing.pool import ThreadPool
+
 try:
     import PySimpleGUI_Custom as sg
     from PySimpleGUI_Custom import Print
@@ -117,7 +118,7 @@ def hash_chunk(file_, multifile, size=48000000):
         yield data
 
 
-def shav(file_, input_, home_, out_file_, multifile=False):
+def shav(file_, input_, home_, out_file_, buffer=48000000, multifile=False):
     Print("DEBUG: Start Hash Function...")
     try:
         Print("DEBUG: Loading Hashes File...")
@@ -128,7 +129,7 @@ def shav(file_, input_, home_, out_file_, multifile=False):
     Print("DEBUG: Hashing Choice Set...")
     hasher = hashlib.sha256()
     Print("DEBUG: Breaking File Into Chunks...")
-    for piece in hash_chunk(multifile=multifile, file_="{}{}".format(input_, file_)):
+    for piece in hash_chunk(multifile=multifile, buffer=buffer,file_="{}{}".format(input_, file_)):
         Print("DEBUG: Chunk Update...")
         hasher.update(piece)
     try:
@@ -144,8 +145,6 @@ def shav(file_, input_, home_, out_file_, multifile=False):
 
 
 def generic_upd3(files, input_, output_, home_):
-    start = datetime.datetime.now()
-    Print("DEBUG: Current Time | {}".format(str(start)))
     cpu_ = multiprocessing.cpu_count()
     Print("DEBUG: Thread Count Set | {}".format(cpu_))
     pool = ThreadPool(processes=int(cpu_))
@@ -162,8 +161,6 @@ def generic_upd3(files, input_, output_, home_):
     Print("DEBUG: Keys | {}".format(keys))
     name_ = "{}{}".format(input_, str(files[0]))
     Print("DEBUG: Hashing Start...")
-    open("test.txt", 'w').write(
-        str(''.join(shav(files[0], input_, multifile=False, home_=home_, out_file_="Input_Data_Hash.txt"))))
     Print("DEBUG: Hashing End!")
     data_val = (int(os.path.getsize(str(name_))))
     Print("DEBUG: File Size | {}".format(data_val))
@@ -182,7 +179,6 @@ def generic_upd3(files, input_, output_, home_):
     Print("DEBUG: File In Use | {}".format(file_x))
     async_result = pool.apply_async(chunk, (file_x, name_))
     payload = async_result.get()
-    # payload = chunk(file_=file_x, name_=name_)
     for piece in payload:  # chunk(file_):
         event = sg.OneLineProgressMeter('Build Progress', name_dig, out_num, 'key')
         Print("DEBUG: Current | {}".format(str(current)))
@@ -211,7 +207,6 @@ def generic_upd3(files, input_, output_, home_):
     Print("DEBUG: Name Dig | {}".format(str(name_dig)))
     if name_dig >= num_total:
         Print("DEBUG: Loading Completion Popup...")
-        Print("DEBUG: End Time | {}".format(str(datetime.datetime.now() - start)))
         Print("DEBUG: Process Should Halt!")
         out_len_ = os.listdir(output_)
         Print("DEBUG: Files In Out Len | {}".format(str(out_len_)))
@@ -223,7 +218,7 @@ def generic_upd3(files, input_, output_, home_):
                 name_in_use += 1
                 Print("DEBUG: Name | {}".format(str(name)))
                 open("Output_Image_Hash.txt", 'w').write(
-                    str(''.join(shav(name, output_, multifile=True, home_=home_, out_file_="Output_Image_Hash.txt"))))
+                    str(''.join(shav(name, output_, buffer=49000096,multifile=True, home_=home_, out_file_="Output_Image_Hash.txt"))))
             except:
                 sg.PopupError("An Unexpected Error Has Occurred!", "Failed to Hash Images")
                 sys.exit()
@@ -238,6 +233,8 @@ def generic_upd3(files, input_, output_, home_):
 
 
 def rip_upd3(name, input_, output_, home_):
+    comp_hash_other_2 = json.load(open('{}{}'.format(home_, "Input_Data_Hash.txt"), 'r'))
+    comp_hash_other_ = json.load(open('{}{}'.format(home_, "Output_Image_Hash.txt"), 'r'))
     pool = ThreadPool(processes=int(multiprocessing.cpu_count()))
     Print("DEBUG: Thread Count Set | {}".format(pool))
     Print("DEBUG: Initializing...")
@@ -268,8 +265,7 @@ def rip_upd3(name, input_, output_, home_):
             break
         temp_name__ = files_[i]
         Print("DEBUG: Temp Name | {}".format(temp_name__))
-        comp_hash_ = ''.join(shav(temp_name__, input_, multifile=True, home_=home_, out_file_=''))
-        comp_hash_other_ = json.load(open('{}{}'.format(home_, "Output_Image_Hash.txt"), 'r'))
+        comp_hash_ = ''.join(shav(temp_name__, input_, buffer=49000096,multifile=True, home_=home_, out_file_=''))
         Print("DEBUG: Hashes | {}".format(comp_hash_other_))
         try:
             if comp_hash_ == comp_hash_other_[temp_name__]:
@@ -288,8 +284,13 @@ def rip_upd3(name, input_, output_, home_):
         Print("DEBUG: All Hashes Matched")
         pass
     else:
-        sg.PopupError("Hashes Do Not Match! | Process Halted!")
-        sys.exit()
+        decision = sg.PopupYesNo("Hashes Do Not Match! | {}/{} | Continue?".format(check, len(files_)))
+        Print("DEBUG: Decision | {}".format(decision))
+        if decision == "Yes":
+            pass
+        else:
+            Print("DEBUG: Stopping Process...")
+            sys.exit()
     for i in range(0, file_len):
         Print("DEBUG: Progress Bar Start...")
         event = sg.OneLineProgressMeter('Build Progress', dig, len(name), 'key_b')
@@ -316,9 +317,6 @@ def rip_upd3(name, input_, output_, home_):
     Print("DEBUG: Checking That All Files Have Been Processed...")
     Print("DEBUG: Check Value |  {}".format(str(check_value)))
     if check_value >= 1:
-        Print("DEBUG: Opening Complete Popup Window...")
-        sg.Popup("Complete!", "Data Output: {}".format(str(len(os.listdir(output_)))),
-                 "Output Location: {}".format(str(output_)))
         Print("DEBUG: Hashing Output File!")
         files_ = os.listdir(output_)
         Print("DEBUG: Files In Output | {}".format(files_))
@@ -328,15 +326,19 @@ def rip_upd3(name, input_, output_, home_):
             nn_ = files_[i]
             Print("DEBUG: Current Name | {}".format(nn_))
             comp_hash_ = ''.join(shav(nn_, output_, home_=home_, out_file_=''))
-            comp_hash_other_ = json.load(open('{}{}'.format(home_, "Input_Data_Hash.txt"), 'r'))
-            if comp_hash_ == comp_hash_other_[nn_]:
+            if comp_hash_ == comp_hash_other_2[nn_]:
                 check += 1
                 Print("DEBUG: Hash Match!")
-                Print("DEBUG: Hashes | OG = {} Current = {}".format(str(comp_hash_other_[nn_]), str(comp_hash_)))
+                Print("DEBUG: Hashes | OG = {} Current = {}".format(str(comp_hash_other_2[nn_]), str(comp_hash_)))
             else:
                 Print("DEBUG: Hash Mismatch!")
-                Print("DEBUG: Hashes | OG = {} Current = {}".format(str(comp_hash_other_[nn_]), str(comp_hash_)))
-                pass
+                Print("DEBUG: Hashes | OG = {} Current = {}".format(str(comp_hash_other_2[nn_]), str(comp_hash_)))
+                decision = sg.PopupYesNo("DEBUG: Output File Hash Does Not Match! | Continue?")
+                if decision == "Yes":
+                    pass
+                else:
+                    Print("DEBUG: Stopping Process...")
+                    sys.exit()
         sg.PopupOK("Process Finished! | Clicking 'OK' Will close the debug Window!")
     else:
         Print("DEBUG: Output Deleted!")
@@ -466,6 +468,30 @@ def agree():
         yield home_true
 
 
+def BMPBrowse(button_text='MyBrowse',
+              target=(sg.ThisRow, -1),
+              file_types=(("ALL Files", "*.*"),),
+              initial_folder=None,
+              size=(None, None),
+              button_color=None,
+              change_submits=False,
+              font=None,
+              disabled=False,
+              image_data=None):
+    return sg.Button(button_text=button_text,
+                     button_type=sg.BUTTON_TYPE_BROWSE_FILE,
+                     target=target,
+                     file_types=file_types,
+                     initial_folder=initial_folder,
+                     size=size,
+                     change_submits=change_submits,
+                     disabled=disabled,
+                     button_color=button_color,
+                     font=font,
+                     image_data=image_data,
+                     border_width=0)
+
+
 def core():
     result = str(''.join(agree()))
 
@@ -492,17 +518,19 @@ def core():
     orange_box = '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'
     yellow_box = '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'
     browse = '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'
+    yellow_browse = 'iVBORw0KGgoAAAANSUhEUgAAAOQAAABOCAYAAAAw0LoFAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAOxAAADsQBlSsOGwAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAH8SURBVHic7dchbmJRGIbh/05GFYmmCoccR+pnUV1APXvoImYDbIAgMVSScW1CMGfkKCAk0PNBnic56l7xmTc5Z2itWj2ej2Go594juJ3WaltVk947ru1H7wHAf4KEID97D7jE4VC1Wp3/b7+vp6r6dfNBdPP1VU+jUe8V1zfc0xtys6maTnuvIMF2WzV5uBekKytEESQEOfmGXK+rlsvvmnLebtd7ASne36vG494rLjefV81mJ35ordqxs1hUq3Ic51pnsTjeW2vVXFkhiCAhiCAhiCAhiCAhiCAhiCAhiCAhiCAhiCAhiCAhiCAhiCAhiCAhiCAhiCAhiCAhiCAhiCAhiCAhiCAhiCAhiCAhiCAhiCAhiCAhiCAhiCAhiCAhiCAhiCAhiCAhiCAhiCAhiCAhiCAhiCAhiCAhiCAhiCAhiCAhiCAhiCAhiCAhiCAhiCAhiCAhiCAhiCAhiCAhiCAhiCAhiCAhiCAhiCAhiCAhiCAhiCAhiCAhiCAhiCAhyNBatWMf1+uq5fI755y221W9vvZeQYK3t6rxuPeKy83nVbPZ8e8ng0yz2VRNp71XkGC7rZpMeq+4PldWCCJICHJXV9bDoWq1Ov/ffl9/X17q9+0X0cvnZ/0ZjeoOX5Gn3VWQF/gYhnruPYLbaa22VfVwr0hXVggiSAjyD4XjRPXZ0K+/AAAAAElFTkSuQmCC'
+    sg.FileBrowse = BMPBrowse
 
     try:
         layout = [[sg.Text('BMPMAN DEBUG {}'.format(version), font=font, text_color='yellow', background_color='black',
                            justification='center', size=(25, 2))],
                   [sg.Text('INPUT', font=font, justification='right', background_color='black', text_color='yellow'),
                    sg.InputText('USE_DEFAULT', font=font, text_color='#909090'),
-                   sg.FolderBrowse(image_data=image_file_to_bytes((browse), (200, 30)), button_text="", border_width=0,
+                   sg.FolderBrowse(image_data=image_file_to_bytes((yellow_browse), (330, 40)), button_text="BROWSE", border_width=0,
                                    button_color=('yellow', 'black'), font=font)],
                   [sg.Text('OUTPUT', font=font, justification='right', background_color='black', text_color='yellow'),
                    sg.InputText('USE_DEFAULT', font=font, text_color='#909090'),
-                   sg.FolderBrowse(image_data=image_file_to_bytes((browse), (200, 30)), button_text="", border_width=0,
+                   sg.FolderBrowse(image_data=image_file_to_bytes((yellow_browse), (330, 40)), button_text="BROWSE", border_width=0,
                                    button_color=('yellow', 'black'), font=font)],
                   [sg.Button('make', font=font, border_width=0, image_data=image_file_to_bytes((red_box), (160, 70)),
                              button_color=('red', 'black')), sg.Button('unpack', font=font, border_width=0,
@@ -529,7 +557,9 @@ def core():
                    sg.Button('exit', font=font, border_width=0, image_data=image_file_to_bytes((yellow_box), (160, 70)),
                              button_color=('yellow', 'black'))]]
 
-    window = sg.Window(title='BMPMan V.{}'.format(version), keep_on_top=False, no_titlebar=False, background_color='Black', grab_anywhere=True, alpha_channel=0.8).Layout(layout)  # Add this after | , alpha_channel=0.8
+    window = sg.Window(title='BMPMan V.{}'.format(version), keep_on_top=False, no_titlebar=False,
+                       background_color='Black', grab_anywhere=True, alpha_channel=0.8).Layout(
+        layout)  # Add this after | , alpha_channel=0.8
 
     event, values = window.Read()
     Print("DEBUG: Event | {}".format(event))
@@ -577,6 +607,7 @@ def core():
             sys.exit()
     except:
         pass
+
 
 initiate()
 core()
