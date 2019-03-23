@@ -1,1 +1,2 @@
-PySimpleGUI27=1.25.0
+PySimpleGUI==1.25.0
+Pillow==5.4.1
