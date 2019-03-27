@@ -42,3 +42,9 @@ This software is licensed under the LGPLv-3, and will be compliant to the GPL li
 Users with permission to act out of bounds of license are:
 
 *DavidBerdik*
+
+## Notice
+
+If you want the theme I use to be an exact replica of the binary versions, use my fork of PySimpleGUI. It's altered specifically to make the theme look like a theme, without cookie cutter boxes...
+
+https://github.com/78Alpha/PySimpleGUI/blob/master/PySimpleGUI.py
