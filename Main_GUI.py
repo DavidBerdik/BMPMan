@@ -284,6 +284,15 @@ def generic_upd3(files, input_, output_, home_, font_, data):
         button_change.Update(button_color=('orange', 'black'),
                              image_data=image_file_to_bytes(data[1], (160, 70)))
     else:
+        event, values = main_window.Read(timeout=0)
+        header_change.Update("PROCESSING DATA...",
+                             text_color='orange')
+        in_text.Update("DISABLED", text_color='white')
+        hash_percent.Update(text_color='white')
+        out_text.Update("DISABLED", text_color='white')
+        hash_percent_2.Update(text_color='white')
+        button_change.Update(button_color=('orange', 'black'),
+                             image_data=image_file_to_bytes(data[1], (160, 70)))
         pass
     for piece in payload:
         event, values = main_window.Read(timeout=0)
@@ -399,7 +408,7 @@ def generic_upd3(files, input_, output_, home_, font_, data):
         button_change.Update("close",
                              button_color=('white', 'black'),
                              image_data=image_file_to_bytes(data[4], (160, 70)))
-        progress_bar.Update(visible=False)
+        progress_bar.UpdateBar(current_count=0)
         mid_text.Update(text_color='white')
         total.Update(text_color="white")
         timer.Update(text_color="white")
@@ -684,8 +693,15 @@ def rip_upd3(name, input_, output_, home_, font_, data):
             else:
                 sys.exit()
     else:
+        event, values = main_window.Read(timeout=0)
+        in_text.Update("DISABLED", text_color='white')
+        hash_percent.Update(text_color='white')
+        out_text.Update("DISABLED", text_color='white')
+        hash_percent_2.Update(text_color='white')
+        button_change.Update(button_color=('orange', 'black'),
+                             image_data=image_file_to_bytes(data[1], (160, 70)))
         pass
-    header_change.Update("PROCESSING",
+    header_change.Update("PROCESSING...",
                          text_color='yellow')
     for i in range(0, new_len):
         event, values = main_window.Read(timeout=0)
@@ -1024,7 +1040,7 @@ def settings(font, home_, data=None):
 def core():
     result = str(''.join(agree()))
 
-    version = "2.0.0"
+    version = "2.0.1"
 
     out_images = 'Output_Images/'
     out_data = 'Output_Data/'
