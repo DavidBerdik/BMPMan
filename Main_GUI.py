@@ -708,8 +708,8 @@ def rip_upd3(name, input_, output_, home_, font_, data):
         if dig is file_len or event == "Button":
             break
         content = open("{}{}".format(input_, str(name[dig])), 'rb').read()
-        temp_name = str(name[dig]).strip("-{}.bmp".format(dig))
-        file_ = "{}{}".format(output_, str(temp_name))
+        temp_name = str(name[dig]).split("-{}.bmp".format(dig))
+        file_ = "{}{}".format(output_, str(temp_name[0]))
         open(file_, 'ab').write(content[96:])
         dig += 1
         progress_bar.UpdateBar(i)
@@ -722,7 +722,7 @@ def rip_upd3(name, input_, output_, home_, font_, data):
             header_change.Update("HASHING OUT",
                                  text_color='white')
             files_ = os.listdir(output_)
-            nn_ = files_[0]
+            nn_ = str(files_[0])
             size = os.path.getsize(f"{output_}/{nn_}")
             out_num = size // 48000000
             out_rem = size % 48000000
