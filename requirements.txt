@@ -1,2 +1,2 @@
 PySimpleGUI==3.25.0
-Pillow==6.2.0
+Pillow>=6.2.0
